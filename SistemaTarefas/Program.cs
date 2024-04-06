@@ -26,6 +26,7 @@ public class Program
             );
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
         var app = builder.Build();
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaTarefas.Data;
 
@@ -11,9 +12,11 @@ using SistemaTarefas.Data;
 namespace SistemaTarefas.Migrations
 {
     [DbContext(typeof(TasksSystemDBContext))]
-    partial class TasksSystemDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240406132656_BondTask")]
+    partial class BondTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
