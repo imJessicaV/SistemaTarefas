@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaTarefas.Models;
+using SistemaTarefas.Repositories.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,40 +9,52 @@ namespace SistemaTarefas.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    // GET: api/<UserController>
+    private readonly IUserRepository _userRepository;
+
+    public UserController(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    //BUSCA TODOS OS USUÁRIOS
     [HttpGet] //buscar dados | isso é chamado de verbo(verbose?) | Lista todos os user quando está sem parametro
-    public ActionResult<List<UserModel>> searchUser()
+    public async Task<ActionResult<List<UserModel>>> searchAllUser()
     {
-       //List<UserModel> userModels = new List<UserModel>();
-       //userModels.Add(new UserModel() { Id = 1, Name = "Jéssica Vitorianbo", Email = "Jéssica Vitoriano"});
-        return Ok();
+       List<UserModel> users = await _userRepository.SearchAllUsers();
+        return Ok(users);
     }
 
-    // GET api/<UserController>/5
+    //BUSCA UM UNICO USUÁRIO
     [HttpGet("{id}")]
-    public UserModel Get(int id)
+    public async Task<ActionResult<UserModel>> searchForId(int id)
     {
-        var user = new UserModel() { Id = 1, Name = "Jéssica Vitorianbo", Email = "Jéssica Vitoriano" };
-
-        return user;
+        UserModel user = await _userRepository.SearchForId(id);
+        return Ok(user);
     }
 
-    // POST api/<UserController>
-    [HttpPost] //inserir dados
-    public void Post([FromBody] UserModel user) //fromBody informa que os dados virão do corpo da API
+    //CADASTRO DE USUÁRIOS
+    [HttpPost]
+    public async Task<ActionResult<UserModel>> Register([FromBody] UserModel userModel)
     {
+        UserModel user = await _userRepository.AddUser(userModel);    
 
+        return Ok(user);
     }
 
-    // PUT api/<UserController>/5
-    [HttpPut("{id}")] //atualizar dados
-    public void Put(int id, [FromBody] UserModel user)
+    [HttpPut]
+    public async Task<ActionResult<UserModel>> Update([FromBody] UserModel userModel, int id)
     {
+        userModel.Id = id;
+        UserModel user = await _userRepository.UpdateUser(userModel, id);
+        return Ok(user);
     }
 
-    // DELETE api/<UserController>/5
-    [HttpDelete("{id}")] //deletar dados
-    public void Delete(int id)
+    [HttpDelete]
+    public async Task<ActionResult<UserModel>> Delete(int id)
     {
+        bool deleted = await _userRepository.DeleteUser(id);
+        return Ok(deleted);
     }
+
 }
+

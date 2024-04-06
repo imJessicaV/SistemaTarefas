@@ -64,5 +64,8 @@ public class UserRepository : IUserRepository
         return true;
     }
 
-   
+    public Task<List<UserModel>> SearchForId()
+    {
+        throw new NotImplementedException();
+    }
 }
